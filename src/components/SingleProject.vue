@@ -3,7 +3,7 @@
     <div class="actions">
       <h3 @click="showDetails = !showDetails">{{ project.title }}</h3>
       <div class="icons">
-        <router-link :to="{ name: 'EditProject', params: { id: project.id}}">
+        <router-link :to="{ name: 'EditProject', params: { id: project.id } }">
           <span class="material-icons">edit</span>
         </router-link>
 
@@ -12,34 +12,39 @@
       </div>
     </div>
     <div v-if="showDetails" class="details">
-      <p>{{ project.details }}</p>
+      <p>{{ project.description }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { DataStore } from "@aws-amplify/datastore";
+import { Projects } from "../models";
+
 export default {
   props: ["project"],
   data() {
     return {
-      showDetails: false,
-      uri: `http://localhost:3000/projects/${this.project.id}`,
+      showDetails: false
     };
   },
   methods: {
-    deleteProject() {
-      fetch(this.uri, { method: "DELETE" })
-        .then(() => this.$emit("delete", this.project.id))
-        .catch((err) => console.log(err));
+    async deleteProject() {
+      const projectToDelete = await DataStore.query(Projects, this.project.id);
+      DataStore.delete(projectToDelete);
+
+      this.$emit("delete", this.project.id);
     },
-    toggleComplete() {
-      fetch(this.uri, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ complete: !this.project.complete }),
-      })
-        .then(() => this.$emit("complete", this.project.id))
-        .catch((err) => console.log(err));
+    async toggleComplete() {
+      let currentProject = await DataStore.query(Projects, this.project.id);
+
+      await DataStore.save(
+        Projects.copyOf(currentProject, (item) => {
+          item.complete = !this.project.complete;
+        })
+      );
+
+      this.$emit("complete", this.project.id);
     },
   },
 };

@@ -12,6 +12,8 @@
 <script>
 import SingleProject from '../components/SingleProject'
 import FilterNav from '../components/FilterNav'
+import { DataStore } from '@aws-amplify/datastore';
+import { Projects } from '../models';
 
 export default {
   name: 'Home',
@@ -25,11 +27,8 @@ export default {
       currentFilter: 'all'
     };
   },
-  mounted() {
-    fetch('http://localhost:3000/projects')
-      .then(res => res.json())
-      .then(data => this.projects = data)
-      .catch(err => console.log(err.message))
+  async mounted() {
+      this.projects = await DataStore.query(Projects);
   },
   methods: {
     handleDelete(id) {

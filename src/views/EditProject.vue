@@ -9,39 +9,37 @@
 </template>
 
 <script>
+import { DataStore } from "@aws-amplify/datastore";
+import { Projects } from "../models";
+
 export default {
-    props: ['id'],
-    data() {
-        return {
-            title: '',
-            details: '',
-            uri: `http://localhost:3000/projects/${this.id}`
-        }
+  props: ["id"],
+  data() {
+    return {
+      title: "",
+      details: "",
+      currentProject: {}
+    };
+  },
+  async mounted() {
+    this.currentProject = await DataStore.query(Projects, this.id);
+
+    this.title = this.currentProject.title;
+    this.details = this.currentProject.description;
+  },
+  methods: {
+    async handleUpdate() {
+      await DataStore.save(
+        Projects.copyOf(this.currentProject, (item) => {
+          item.title = this.title
+          item.description = this.details
+        })
+      );
+      this.$router.push("/");
     },
-    mounted() {
-        fetch(this.uri)
-            .then(res => res.json())
-            .then(data => {
-                this.title = data.title,
-                this.details = data.details
-            })
-    },
-    methods: {
-        handleUpdate() {
-            fetch(this.uri, {
-                method: "PATCH",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    title: this.title,
-                    details: this.details
-                })
-            }).then(() => this.$router.push('/'))
-            .catch(err => console.log(err))
-        }
-    },
-}
+  },
+};
 </script>
 
 <style>
-
 </style>
