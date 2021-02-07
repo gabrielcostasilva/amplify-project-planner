@@ -1,6 +1,0 @@
-type Projects @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  title: String
-  description: String
-  complete: Boolean
-}
