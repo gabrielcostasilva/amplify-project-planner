@@ -24,7 +24,7 @@ export default {
       await DataStore.save(
         new Projects({
           "title": this.title,
-          "description": this.details,
+          "details": this.details,
           "complete": false
         })
       );

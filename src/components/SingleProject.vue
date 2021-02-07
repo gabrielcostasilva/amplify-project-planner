@@ -12,7 +12,7 @@
       </div>
     </div>
     <div v-if="showDetails" class="details">
-      <p>{{ project.description }}</p>
+      <p>{{ project.details }}</p>
     </div>
   </div>
 </template>

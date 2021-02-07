@@ -25,14 +25,14 @@ export default {
     this.currentProject = await DataStore.query(Projects, this.id);
 
     this.title = this.currentProject.title;
-    this.details = this.currentProject.description;
+    this.details = this.currentProject.details;
   },
   methods: {
     async handleUpdate() {
       await DataStore.save(
         Projects.copyOf(this.currentProject, (item) => {
           item.title = this.title
-          item.description = this.details
+          item.details = this.details
         })
       );
       this.$router.push("/");
