@@ -127,39 +127,4 @@ async deleteProject() {
 
 
 ## Dependencies
-
-
-## Data
-
-
-## Running the Project Locally
-
-To run the project, ensure that you have NPM installed. You also need the _json-server_ installed globally before starting.
-
-1. Clone the project locally
-
-```
-git clone https://github.com/gabrielcostasilva/project-planner.git
-```
-
-2. In the project folder, start the _json-server_
-
-```
-json-server --watch data/db.json
-```
-
-3. Open another terminal. In the project folder, start the project.
-
-```
-npm run serve
-```
-
-4. Access the app with your browser at `http://localhost:8080`
-
-# amplify-project-planner
-This project introduces AWS Amplify on top of the vue-project-planner project.
-
-https://docs.amplify.aws/start/q/integration/vue
-
-Amplify Admin UI Sandbox
-https://sandbox.amplifyapp.com/start#datastore
+The json-server is removed whereas aws-amplify is added. Please, check [Erik's short tutorial](https://www.youtube.com/watch?v=Q70eWux2xpQ) to be aware of all dependencies. 
